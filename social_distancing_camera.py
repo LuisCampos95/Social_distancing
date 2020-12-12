@@ -5,7 +5,6 @@ import numpy as np
 from centroidtracker import CentroidTracker
 from itertools import combinations
 import math
-import playsound
 
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
@@ -141,7 +140,6 @@ def main():
         if len(red_zone_list) >= 2:
             fps_text = "ALERTA"
             cv2.putText(frame, fps_text, (100, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.4, (0, 0, 255), 2)
-            # playsound.playsound('musica.mp3')
 
 
         fps_end_time = datetime.datetime.now()
@@ -155,7 +153,7 @@ def main():
 
         cv2.putText(frame, fps_text, (10, 40), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (255, 255, 255), 2)
 
-        cv2.imshow("Social_Distancing", frame)
+        cv2.imshow("Distanciamento Social", frame)
         key = cv2.waitKey(1)
         if key == ord('q'):
             break

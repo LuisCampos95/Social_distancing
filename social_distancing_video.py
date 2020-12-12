@@ -5,14 +5,6 @@ import numpy as np
 from centroidtracker import CentroidTracker
 from itertools import combinations
 import math
-import playsound
-
-
-# import pygame
-# pygame.mixer.init()
-# pygame.mixer.music.load('musica.mp3')
-# pygame.mixer.music.play()
-# while(pygame.mixer.music.get_busy()): pass
 
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
@@ -151,7 +143,6 @@ def main():
         # if len(red_zone_list) >= 2:
             # fps_text = "ALERTA"
             # cv2.putText(frame, fps_text, (280, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 2)
-            # playsound.playsound('musica.mp3')
 
         fps_end_time = datetime.datetime.now()
         time_diff = fps_end_time - fps_start_time
@@ -163,7 +154,7 @@ def main():
         fps_text = "FPS: {:.2f}".format(fps)
         cv2.putText(frame, fps_text, (5, 355), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (255, 255, 255), 2)
 
-        cv2.imshow("Social_Distancing", frame)
+        cv2.imshow("Distanciamento Social", frame)
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
