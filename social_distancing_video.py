@@ -5,6 +5,14 @@ import numpy as np
 from centroidtracker import CentroidTracker
 from itertools import combinations
 import math
+import playsound
+
+
+# import pygame
+# pygame.mixer.init()
+# pygame.mixer.music.load('musica.mp3')
+# pygame.mixer.music.play()
+# while(pygame.mixer.music.get_busy()): pass
 
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
@@ -57,7 +65,8 @@ def non_max_suppression_fast(boxes, overlapThresh):
         print("Exception occurred in non_max_suppression : {}".format(e))
 
 def main():
-    cap = cv2.VideoCapture('faixa.mp4')
+    cap = cv2.VideoCapture('vid_short.mp4')
+    # cap = cv2.VideoCapture('faixa.mp4')
 
     fps_start_time = datetime.datetime.now()
     fps = 0
@@ -103,8 +112,8 @@ def main():
 
             centroid_dict[objectId] = (cX, cY, x1, y1, x2, y2)
 
-            text = "Risco"
-            cv2.putText(frame, text, (x1, y1-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 255), 1)
+            # text = "Risco"
+            # cv2.putText(frame, text, (x1, y1-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 255), 1)
 
         red_zone_list = []
         for (id1, p1), (id2, p2) in combinations(centroid_dict.items(), 2):
@@ -119,19 +128,30 @@ def main():
         for id, box in centroid_dict.items():
             if id in red_zone_list:
                cv2.rectangle(frame, (box[2], box[3]), (box[4], box[5]), (0, 0, 255), 2) #Vermelho
+
+               # text = "Risco"
+               # cv2.putText(frame, text, (x1, y1-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 255), 1)
+
             else:
                cv2.rectangle(frame, (box[2], box[3]), (box[4], box[5]), (0, 255, 0), 2) #Verde
 
-        if len(red_zone_list) != 0:
+        red = len(red_zone_list)
+
+        if red != 0:
             fps_text = "Pessoas em risco: {}".format(len(red_zone_list))
-            cv2.putText(frame, fps_text, (10, 380), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 1)
+            cv2.rectangle(frame, (0, frame.shape[0] - 60), (245, frame.shape[0]), (0, 0, 0), cv2.FILLED)
+            cv2.putText(frame, fps_text, (5, 380), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (0, 0, 255), 2)
+
         else:
             fps_text = "Pessoas em risco: 0"
-            cv2.putText(frame, fps_text, (10, 380), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 1)
+            cv2.rectangle(frame, (0, frame.shape[0] - 60), (245, frame.shape[0]), (0, 0, 0), cv2.FILLED)
+            cv2.putText(frame, fps_text, (5, 380), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (0, 0, 255), 2)
 
-        if len(red_zone_list) >= 2:
-            fps_text = "ALERTA"
-            cv2.putText(frame, fps_text, (280, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 2)
+
+        # if len(red_zone_list) >= 2:
+            # fps_text = "ALERTA"
+            # cv2.putText(frame, fps_text, (280, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 2)
+            # playsound.playsound('musica.mp3')
 
         fps_end_time = datetime.datetime.now()
         time_diff = fps_end_time - fps_start_time
@@ -141,8 +161,7 @@ def main():
             fps = (total_frames / time_diff.seconds)
 
         fps_text = "FPS: {:.2f}".format(fps)
-
-        cv2.putText(frame, fps_text, (10, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 0), 1)
+        cv2.putText(frame, fps_text, (5, 355), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (255, 255, 255), 2)
 
         cv2.imshow("Social_Distancing", frame)
         key = cv2.waitKey(1)

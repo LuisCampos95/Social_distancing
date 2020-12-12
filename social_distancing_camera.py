@@ -5,6 +5,7 @@ import numpy as np
 from centroidtracker import CentroidTracker
 from itertools import combinations
 import math
+import playsound
 
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
@@ -103,8 +104,8 @@ def main():
 
             centroid_dict[objectId] = (cX, cY, x1, y1, x2, y2)
 
-            text = "Risco"
-            cv2.putText(frame, text, (x1, y1-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 255), 1)
+            # text = "Risco"
+            # cv2.putText(frame, text, (x1, y1-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 255), 1)
 
         red_zone_list = []
         for (id1, p1), (id2, p2) in combinations(centroid_dict.items(), 2):
@@ -132,14 +133,16 @@ def main():
 
         if len(red_zone_list) != 0:
             fps_text = "Pessoas em risco: {}".format(len(red_zone_list))
-            cv2.putText(frame, fps_text, (10, 500), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 1)
+            cv2.putText(frame, fps_text, (10, 500), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (0, 0, 255), 2)
         else:
             fps_text = "Pessoas em risco: 0"
-            cv2.putText(frame, fps_text, (10, 500), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 1)
+            cv2.putText(frame, fps_text, (10, 500), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (0, 0, 255), 2)
 
         if len(red_zone_list) >= 2:
             fps_text = "ALERTA"
-            cv2.putText(frame, fps_text, (100, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 255), 1)
+            cv2.putText(frame, fps_text, (100, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.4, (0, 0, 255), 2)
+            # playsound.playsound('musica.mp3')
+
 
         fps_end_time = datetime.datetime.now()
         time_diff = fps_end_time - fps_start_time
@@ -150,7 +153,7 @@ def main():
 
         fps_text = "FPS: {:.2f}".format(fps)
 
-        cv2.putText(frame, fps_text, (10, 40), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (255, 255, 255), 1)
+        cv2.putText(frame, fps_text, (10, 40), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.95, (255, 255, 255), 2)
 
         cv2.imshow("Social_Distancing", frame)
         key = cv2.waitKey(1)
