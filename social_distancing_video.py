@@ -57,7 +57,8 @@ def non_max_suppression_fast(boxes, overlapThresh):
         print("Exception occurred in non_max_suppression : {}".format(e))
 
 def main():
-    cap = cv2.VideoCapture('rua.mp4')
+    cap = cv2.VideoCapture('pedestres.mp4')
+    # cap = cv2.VideoCapture('rua.mp4')
     # cap = cv2.VideoCapture('faixa.mp4')
 
     fps_start_time = datetime.datetime.now()
